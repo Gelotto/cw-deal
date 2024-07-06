@@ -1,7 +1,4 @@
-use crate::{
-    error::ContractError,
-    state::{models::Config, storage::CONFIG},
-};
+use crate::{data::Config, error::ContractError, state::CONFIG};
 use cosmwasm_std::{attr, Response};
 
 use super::Context;

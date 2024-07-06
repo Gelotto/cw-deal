@@ -1,6 +1,6 @@
 use cosmwasm_schema::cw_serde;
 
-use crate::state::models::Config;
+use crate::data::Config;
 
 #[cw_serde]
 pub struct InstantiateMsg {}
