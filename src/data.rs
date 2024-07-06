@@ -56,12 +56,21 @@ pub struct Party {
 }
 
 #[cw_serde]
+pub struct DealMetadata {
+    pub name: Option<String>,
+    pub description: Option<String>,
+    pub image_url: Option<String>,
+}
+
+#[cw_serde]
 pub struct Deal {
     pub id: String,
     /// Time the deal was initialized
     pub created_at: Timestamp,
     /// Address of person to initialize the deal
     pub created_by: Addr,
+    /// Marketing info & other metadata
+    pub metadata: DealMetadata,
     /// List of all parties included in the deal
     pub parties: Vec<Party>,
     /// List of all items being exchanged in the deal
