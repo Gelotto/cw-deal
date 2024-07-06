@@ -1,13 +1,13 @@
 use crate::error::ContractError;
-use crate::execute::{config::exec_set_config, Context};
+use crate::execute::{set_config::exec_set_config, Context};
 use crate::msg::{ExecuteMsg, InstantiateMsg, MigrateMsg, QueryMsg};
 use crate::query::{config::query_config, ReadonlyContext};
-use crate::state;
+use crate::state::init_contract;
 use cosmwasm_std::{entry_point, to_json_binary};
 use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response};
 use cw2::set_contract_version;
 
-const CONTRACT_NAME: &str = "crates.io:cw-contract-template";
+const CONTRACT_NAME: &str = "crates.io:cw-deal";
 const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[entry_point]
@@ -18,7 +18,7 @@ pub fn instantiate(
     msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
     set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
-    Ok(state::init(Context { deps, env, info }, &msg)?)
+    Ok(init_contract(Context { deps, env, info }, msg)?)
 }
 
 #[entry_point]
