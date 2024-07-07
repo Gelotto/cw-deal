@@ -3,7 +3,9 @@ use cosmwasm_schema::cw_serde;
 use crate::data::Config;
 
 #[cw_serde]
-pub struct InstantiateMsg {}
+pub struct InstantiateMsg {
+    name: Option<String>,
+}
 
 #[cw_serde]
 pub enum ExecuteMsg {
