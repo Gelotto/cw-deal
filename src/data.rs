@@ -1,5 +1,5 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Addr, Coin, Timestamp, Uint64};
+use cosmwasm_std::{Addr, Coin, Timestamp, Uint128, Uint64};
 
 #[cw_serde]
 pub struct Config {}
@@ -22,7 +22,7 @@ pub enum ExchangeParams {
 /// Marketing info and other metadata pertaining to an object of consideration
 /// (i.e. something being offered in exchange)
 #[cw_serde]
-pub struct ConsiderationItemMetadata {
+pub struct ConsiderationMetadata {
     pub name: Option<String>,
     pub description: Option<String>,
     pub image_urls: Option<Vec<String>>,
@@ -38,19 +38,19 @@ pub enum ConsiderationItemPartyStatus {
 /// Marketing info and other metadata pertaining to an object of consideration
 /// (i.e. something being offered in exchange)
 #[cw_serde]
-pub struct ConsiderationItemParty {
+pub struct ConsiderationParty {
     pub address: Addr,
     pub status: ConsiderationItemPartyStatus,
 }
 
 /// Item being exchanged.
 #[cw_serde]
-pub struct ConsiderationItem {
-    pub id: String,
+pub struct Consideration {
+    pub asset_ids: Vec<String>,
     /// Marketing & display info
-    pub metadata: ConsiderationItemMetadata,
+    pub metadata: ConsiderationMetadata,
     /// The initiating party & counterparty
-    pub parties: Vec<ConsiderationItemParty>,
+    pub parties: Vec<ConsiderationParty>,
     /// Structured config for how the item shall be exchanged
     pub params: ExchangeParams,
 }
@@ -87,5 +87,22 @@ pub struct Deal {
     /// List of all parties included in the deal
     pub parties: Vec<Party>,
     /// List of all items being exchanged in the deal
-    pub items: Vec<ConsiderationItem>,
+    pub items: Vec<Consideration>,
+}
+
+/// Item being exchanged.
+#[cw_serde]
+pub enum Asset {
+    TokenAmount {
+        denom: String,
+        amount: Uint128,
+    },
+    Nft {
+        collection_addr: Addr,
+        token_id: String,
+    },
+    Thing {
+        id: String,
+        name: String,
+    },
 }
