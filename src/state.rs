@@ -1,11 +1,12 @@
-use cosmwasm_std::{Response, Addr, Timestamp};
+use cosmwasm_std::{Response, Addr, Env};
 use cw_storage_plus::Item;
-use crate::{data::{DealMetadata, Deal}, error::ContractError, execute::Context, msg::InstantiateMsg};
+use crate::{data::{DealMetadata}, error::ContractError, execute::Context, msg::InstantiateMsg};
 use super::data::Config;
 
 pub const CONFIG: Item<Config> = Item::new("config");
 pub const DEAL_METADATA: Item<DealMetadata> = Item::new("deal_metadata");
-pub const DEAL: Item<Deal> = Item::new("deal");
+pub const CREATED_AT: Item<Env> = Item::new("created_at");
+pub const CREATED_BY: Item<Addr> = Item::new("created_by");
 
 /// Top-level initialization of contract state
 pub fn init_contract(
@@ -17,18 +18,11 @@ pub fn init_contract(
         description: msg.description,
         image_url: None, // Placeholder
     };
-    
-    let deal = Deal {
-        id: "initial_deal".to_string(), // Placeholder
-        created_at: Timestamp::from_seconds(ctx.env.block.time.seconds()),
-        created_by: ctx.info.sender.clone(),
-        metadata,
-        parties: vec![],
-        items: vec![],
-    };
-    
-    DEAL.save(ctx.deps.storage, &deal)?;
-    
+
+    DEAL_METADATA.save(ctx.deps.storage, &metadata)?;
+    CREATED_AT.save(ctx.deps.storage, &ctx.env.block.time)?;
+    CREATED_BY.save(ctx.deps.storage, &ctx.info.sender)?;
+
     Ok(Response::new().add_attribute("action", "instantiate"))
 }
 
