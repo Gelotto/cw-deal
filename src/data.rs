@@ -28,18 +28,31 @@ pub struct ConsiderationItemMetadata {
     pub image_urls: Option<Vec<String>>,
 }
 
+#[cw_serde]
+pub enum ConsiderationItemPartyStatus {
+    Pending,
+    Accepted,
+    Rejected,
+}
+
+/// Marketing info and other metadata pertaining to an object of consideration
+/// (i.e. something being offered in exchange)
+#[cw_serde]
+pub struct ConsiderationItemParty {
+    pub address: Addr,
+    pub status: ConsiderationItemPartyStatus,
+}
+
 /// Item being exchanged.
 #[cw_serde]
 pub struct ConsiderationItem {
     pub id: String,
     /// Marketing & display info
     pub metadata: ConsiderationItemMetadata,
-    /// How the item is exchanged
+    /// The initiating party & counterparty
+    pub parties: Vec<ConsiderationItemParty>,
+    /// Structured config for how the item shall be exchanged
     pub params: ExchangeParams,
-    /// The offering party
-    pub owner: Addr,
-    /// The receiving party
-    pub recipient: Addr,
 }
 
 #[cw_serde]
